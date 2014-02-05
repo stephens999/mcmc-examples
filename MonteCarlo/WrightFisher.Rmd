@@ -1,0 +1,72 @@
+Start by setting the seed of the random number generator so that results
+will be reproducible.
+```{r}
+  set.seed(100) # this is included just to make sure results are reproducible
+```
+
+Now I declare a function to simulate a Wright-Fisher model, without mutation.
+Note that the WF model assumes that the next generation is formed by sampling with replacement from the current generation, which is easily implemented in R using the function `sample`.
+
+The two parameters are the starting state `x`, and the number of generations to be simulated `ngen`.
+```{r}
+
+sim.WF = function(x,ngen){
+  for(i in 1:ngen){
+    x= sample(x,replace=TRUE)
+  }
+  return(x)
+}
+```
+
+To illustrate, here we set up a population of size 20, containing 10 0s and 10 1s, and see the result of evolving it under the WF model for 100 generations.
+```{r}
+  x0 = c(rep(0,10),rep(1,10)) #starting point is 10 0s and 10 1s
+  print(x0)
+  y=sim.WF(x0,100)
+  print(sort(y))
+```
+
+In this case we see that, after 100 generations, everyone is of type `1`. That is the `1` allele went to fixation. How can we compute the probability that the
+1 allele will go to fixation in 100 generations? The answer, of course, is to use Monte Carlo: simulate the process many times (in this case 100) and store
+the results.
+
+```{r}
+  niter=100
+  res = matrix(nrow=niter, ncol=length(x0))
+  for(i in 1:niter){   
+    res[i,]=sim.WF(x0,100)
+  }
+  res
+```
+
+So what proportion of these 100 did the 1 allele go to fixation? To answer
+this we have to write a function 'allones' to test whether something is all 1s, and
+then use the R function 'apply' to apply this function to test each row of res:
+```{r}
+  allones = function(x){return(all(x==1))}
+  onefixed = apply(res,1,allones)
+  onefixed
+```
+
+Now we can find the Monte Carlo estimate of the fixation probability as the proportion of our simulations in which 1 became fixed:
+```{r}
+  mean(onefixed)
+```
+
+Of course, we will have some error in this estimate (``Monte Carlo error")!
+We can reduce this error by doing more simulations!
+
+```{r}
+  niter=10000
+  res = matrix(nrow=niter, ncol=length(x0))
+  for(i in 1:niter){   
+    res[i,]=sim.WF(x0,100)
+  }
+  onefixed = apply(res,1,allones)
+  mean(onefixed)
+```
+
+
+
+
+
