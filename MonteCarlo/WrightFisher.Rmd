@@ -18,9 +18,9 @@ sim.WF = function(x,ngen){
 }
 ```
 
-To illustrate, here we set up a population of size 20, containing 10 0s and 10 1s, and see the result of evolving it under the WF model for 100 generations.
+To illustrate, here we set up a population of size 20, containing 15 0s and 5 1s, and see the result of evolving it under the WF model for 100 generations.
 ```{r}
-  x0 = c(rep(0,10),rep(1,10)) #starting point is 10 0s and 10 1s
+  x0 = c(rep(0,15),rep(1,5)) #starting point is 10 0s and 10 1s
   print(x0)
   y=sim.WF(x0,100)
   print(sort(y))
