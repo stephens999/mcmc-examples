@@ -78,9 +78,10 @@ lines(z3,col=3)
 
 
 par(mfcol=c(3,1)) #rather odd command tells R to put 3 graphs on a single page
-hist(z1)
-hist(z2)
-hist(z3)
+maxz=max(c(z1,z2,z3))
+hist(z1,breaks=seq(0,maxz,length=20))
+hist(z2,breaks=seq(0,maxz,length=20))
+hist(z3,breaks=seq(0,maxz,length=20))
 
 
 # Exercises: use the function easyMCMC to explore the following:
