@@ -212,5 +212,20 @@ return(list(f=f,p=p)) # return a "list" with two elements named f and p
 }
 
 
+# How about tackling this with a Gibbs Sampler?
+# We need the following "latent variable" representation of the above likelihood:
+# z_i \sim Bernoulli(f)
+# p(g_i=AA | z_i=1) = p; p(g_i=AA | z_i=0) = p^2
+# p(g_i=Aa | z_i = 1)= 0; p(g_i=Aa | z_i=0) = 2p(1-p)
+# p(g_i=aa | z_i = 1) = (1-p); p(g_i =aa | z_i=0) = (1-p)^2
+# 
+# Summing over z_i gives the same likelihood as above
+# eg p(g_i=AA) = fp + (1-f)p^2
+#
+# Implementing a Gibbs Sampler requires iterating the following steps
+# 1) sample z from p(z | g, f, p)
+# 2) sample f,p from p(f, p | g, z)
+
+
 
 
